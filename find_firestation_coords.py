@@ -1,6 +1,5 @@
 import pandas as pd
 from arcgis.gis import GIS
-from arcgis.geocoding import geocode
 from location_finder import create_address_dict, get_coords
 
 gis = GIS(profile = "LogajoQRX")

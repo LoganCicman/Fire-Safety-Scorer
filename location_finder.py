@@ -23,6 +23,3 @@ def get_coords(addr: dict):
     #data = geocode(addr, search_extent={'ymin': 40.49, 'ymax': 45.025, 'xmin': -79.78, 'xmax': -71.86})
     data = geocode(addr)
     return data[0]['location']['x'], data[0]['location']['y']
-
-if __name__ == "__main__":
-    address = create_address_dict('1039 West Park Avenue', 'Long Beach', 'NY', '11561')
