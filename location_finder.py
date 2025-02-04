@@ -7,12 +7,12 @@ gis = GIS(profile='LogajoQRX')
     Helper function to combine adress data into a dict that can be fed into geocode().
     OUTPUT: dict(str:str)
 """
-def create_address_dict(street: str, house_num: str, city: str, state: str, zip_code: str):
+def create_address_dict(street: str, city: str, state: str, zip_code: str):
     addr = dict()
-    addr['Street'] = house_num + " " + street
+    addr['Street'] = street
     addr['City'] = city
     addr['State'] = state
-    addr['Zone'] = zip_code
+    addr['Postal'] = zip_code
     return addr
     
 """
@@ -20,13 +20,9 @@ def create_address_dict(street: str, house_num: str, city: str, state: str, zip_
     OUTPUT: tuple(double)
 """
 def get_coords(addr: dict):
+    #data = geocode(addr, search_extent={'ymin': 40.49, 'ymax': 45.025, 'xmin': -79.78, 'xmax': -71.86})
     data = geocode(addr)
-    for i in range(len(data)):
-        print(data[0]['location']['x'])
     return data[0]['location']['x'], data[0]['location']['y']
 
 if __name__ == "__main__":
-    address = create_address_dict('Morningside Drive', '70', 'New York', 'NY', '10027')
-    print(address)
-    print(get_coords(address))
-    exit
+    address = create_address_dict('1039 West Park Avenue', 'Long Beach', 'NY', '11561')
