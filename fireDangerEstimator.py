@@ -2,10 +2,16 @@ import numpy as np
 import pandas as pd
 from location_finder import create_address_dict, get_coords
 from arcgis.gis import GIS
+from arcgis.geocoding import get_geocoders
 
 gis = GIS(profile="LogajoQRX")
 
 if __name__ == "__main__":
+    #Download station data to pandas dataframe.
+    locs = pd.read_csv("data/Station_Coordinates.csv")
+
+    print(get_geocoders(gis)[0])
+
     print("Welcome to the Fire Safety Scorer.")
     while True:
         #Prompt user for address input and format properly.
@@ -51,6 +57,24 @@ if __name__ == "__main__":
         print(addr)
         addr_xy = get_coords(addr)
         print(addr_xy)
+
+        """
+        Find all fire stations within 2.9mi of the location.
+        Use Law of Haversines to find distance from each fire station.
+        """
+        r = 3963
+        long = np.deg2rad(addr_xy[0])
+        lat = np.deg2rad(addr_xy[1])
+        nearby = list()
+        for idx, station in locs.iterrows():
+            f_long = np.deg2rad(station["x"])
+            f_lat = np.deg2rad(station["y"])
+            d = np.sin((lat-f_lat)/2)**2 + np.cos(lat)*np.cos(f_lat)*(np.sin((long-f_long)/2)**2)
+            d = 2*r*np.arcsin(d**0.5)
+            if d <= 1.0:
+                nearby.append(station["ID"])
+
+        print(nearby)
 
         #Ask user if they would like to test another address.
         print("Thank you for using the Fire Safety Scorer. Enter 1 to test another address or 0 to exit.")
